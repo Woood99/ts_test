@@ -8,7 +8,7 @@ const MainBlock = () => {
                Typescript - язык со статической типизацией, который по умолчанию использует строгую типизацию, но предоставляет ослаблять её когда
                необходимо (например any).
             </h2>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 max-md:grid-cols-1">
                <ConceptBlock
                   title={{
                      main: 'Динамическая типизация',
