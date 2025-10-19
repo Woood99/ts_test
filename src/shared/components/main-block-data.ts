@@ -42,6 +42,23 @@ data = true; // ✅ Разрешено`,
       ],
    },
    {
+      title: 'Типы',
+      codeBlocks: [
+         {
+            title: {
+               main: 'Тип',
+               subtitle: 'множество (к типам нужно относится как к множествам)',
+            },
+            codeBlock: {
+               title: 'Примеры представления типов как множеств:',
+               code: `type StringSet = string;    // Множество строк {"a", "b", "c"}
+type NumberSet = number;    // Множество чисел {1, 2, 3}
+type BooleanSet = boolean;  // Множество boolean значений true | false`,
+            },
+         },
+      ],
+   },
+   {
       title: 'Объединение (union)',
       codeBlocks: [
          {
@@ -50,7 +67,7 @@ data = true; // ✅ Разрешено`,
                subtitle: 'это тип, который описывает значения, принадлежащие хотя бы одному из исходных типов',
             },
             codeBlock: {
-               title: 'Примеры объединения множеств:',
+               title: 'Примеры объединения типов:',
                code: `type MainInfo = {
    firstname: string;
    lastname: string;
@@ -96,6 +113,52 @@ const user0: UserInfo = {
    lastname: '123',
    age: 123,
 };`,
+            },
+         },
+      ],
+   },
+   {
+      title: 'Надтипы и Подтипы',
+      codeBlocks: [
+         {
+            title: {
+               main: 'Отношения надтипов и подтипов',
+               subtitle: 'Подтип содержит все свойства надтипа и добавляет новые',
+            },
+            descr: `
+            <b>Super Type</b> - надтип <br/>
+            <b>Sub Type</b> - подтип <br/>
+            <b>Подтип</b> считается тот тип у которого есть поля родителя и при этом добавляет свои
+            `,
+            codeBlock: {
+               title: 'Базовые примеры отношений:',
+               code: `type SuperType = {
+   name: string;
+};
+
+type SubType = {
+   name: string;
+   age: number;
+};
+
+// ✅ Подтип можно присвоить надтипу
+// Создаём объект который соответствует SubType и присваиваем переменную "subType" переменной "superType"
+const subType: SubType = { name: '123', age: 123 };
+const superType: SuperType = subType; // допустимо
+
+Итого:
+SubType содержит ВСЕ свойства SuperType (name) + дополнительные (age). 
+TypeScript говорит: "У subType точно есть всё, что нужно SuperType (name), поэтому можно присвоить".
+
+// ❌ Надтип нельзя присвоить подтипу
+// Создаём объект который соответсвует SuperType и присваиваем переменную "superType2" переменной subType2
+const superType2: SuperType = { name: '123' };
+const subType2: SubType = superType2; // недопустимо
+
+Итого:
+SuperType НЕ содержит свойство age, которое требуется для SubType. 
+TypeScript говорит: "Я не могу гарантировать, что у superType2 есть свойство age, поэтому нельзя присвоить".
+`,
             },
          },
       ],

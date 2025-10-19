@@ -13,6 +13,10 @@ body {
    line-height: 1.4;
 }
 
+b {
+   @apply font-medium;
+}
+
 .container {
    max-width: 1380px;
    margin: 0 auto;
@@ -44,20 +48,22 @@ ul {
 }
 
 .concept-title {
-   margin: 0 0 15px 0;
+   margin-bottom: 6px;
    font-size: 16px;
    line-height: 1.4;
    color: var(--dark);
-   b {
-      @apply font-medium;
-   }
+}
+.concept-descr {
+   color: var(--dark);
+   font-size: 14px;
+   line-height: 1.4;
 }
 
 .code-example {
    background: #2d2d2d;
    border-radius: 12px;
    overflow: hidden;
-   margin: 10px 0;
+   margin: 16px 0 10px 0;
 }
 
 .code-header {

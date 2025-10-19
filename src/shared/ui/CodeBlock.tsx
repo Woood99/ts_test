@@ -7,7 +7,7 @@ export interface CodeBlockProps {
    language?: string;
 }
 
-const CodeBlock = ({ title, code, language = 'javascript' }: CodeBlockProps) => {
+const CodeBlock = ({ title, code, language = 'typescript' }: CodeBlockProps) => {
    return (
       <div className="code-example">
          <div className="code-header">{title}</div>

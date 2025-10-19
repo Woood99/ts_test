@@ -2,8 +2,6 @@ import { Accordion, ConceptBlock } from '@/shared/ui';
 import MainBlockData from './main-block-data';
 
 const MainBlock = () => {
-
-
    return (
       <div className="flex flex-col gap-12">
          <section>
@@ -30,6 +28,7 @@ const MainBlock = () => {
                                           main: codeBlock.title.main,
                                           subtitle: codeBlock.title.subtitle,
                                        }}
+                                       descr={codeBlock.descr}
                                        codeBlock={{
                                           title: codeBlock.codeBlock.title,
                                           code: codeBlock.codeBlock.code,
