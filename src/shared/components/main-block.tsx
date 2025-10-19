@@ -1,5 +1,5 @@
 import { Accordion, ConceptBlock } from '@/shared/ui';
-import MainBlockData from './main-block-data';
+import { MainBlockData } from '../data';
 
 const MainBlock = () => {
    return (
