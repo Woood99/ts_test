@@ -1,7 +1,7 @@
 import cn from 'clsx';
 import CodeBlock, { CodeBlockProps } from './CodeBlock';
 
-interface Props {
+export interface IConceptBlock {
    className?: string;
    title: {
       main: string;
@@ -10,7 +10,7 @@ interface Props {
    codeBlock: CodeBlockProps;
 }
 
-const ConceptBlock = ({ className, title, codeBlock }: Props) => {
+const ConceptBlock = ({ className, title, codeBlock }: IConceptBlock) => {
    return (
       <div className={cn('concept-block', className)}>
          <p className="concept-title">

@@ -1,82 +1,47 @@
-import { ConceptBlock } from '@/shared/ui';
+import { Accordion, ConceptBlock } from '@/shared/ui';
+import MainBlockData from './main-block-data';
 
 const MainBlock = () => {
+
+
    return (
       <div className="flex flex-col gap-12">
          <section>
-            <h2>
+            <h2 className="max-md:px-4">
                Typescript - язык со статической типизацией, который по умолчанию использует строгую типизацию, но предоставляет ослаблять её когда
                необходимо (например any).
             </h2>
-            <div className="grid grid-cols-2 gap-3 max-md:grid-cols-1">
-               <ConceptBlock
-                  title={{
-                     main: 'Динамическая типизация',
-                     subtitle: 'Определяется во время выполнения программы (в рантайме), и может меняться в процессе работы',
-                  }}
-                  codeBlock={{
-                     title: 'Пример динамического изменения типа:',
-                     code: `let x;          // тип undefined
-x = 5;          // теперь тип number
-x = "Hello";    // теперь тип string
-x = true;       // теперь тип boolean`,
-                  }}
-               />
-               <ConceptBlock
-                  title={{
-                     main: 'Статическая типизация',
-                     subtitle: 'Типы проверяются во время компиляции написании кода, а не во время выполнения программы',
-                  }}
-                  codeBlock={{
-                     title: 'Примеры строгой и ослабленной типизации:',
-                     code: `// Строгая типизация (по умолчанию)
-let age: number = 25;
-age = "30"; // ❌ Ошибка компиляции
-
-// Ослабленная типизация (когда нужно)
-let data: any = 25;
-data = "30";     // ✅ Разрешено
-data = true; // ✅ Разрешено`,
-                  }}
-               />
-            </div>
-         </section>
-         <section>
-            <h2>
-               Объединение (union) множеств — это операция, которая создает новое множество, содержащее все элементы из всех исходных множеств без
-               повторений.
-            </h2>
-            <div className="grid grid-cols-2 gap-3">
-               <ConceptBlock
-                  className="col-span-2"
-                  title={{
-                     main: 'Объединение (union) множеств',
-                     subtitle: 'Операция над двумя исходными множествами, создающая третье результирующее множество, содержащее все элементы из обоих множеств',
-                  }}
-                  codeBlock={{
-                     title: 'Примеры объединения множеств:',
-                     code: `// Математика
-A = {1, 2, 3}, B = {3, 4, 5}
-A ∪ B = {1, 2, 3, 4, 5}
-
-// TypeScript - простые типы
-let id: number | string;
-id = 123;      // ✅
-id = "ABC123"; // ✅
-
-// TypeScript - литеральные типы  
-type Status = "success" | "error" | "loading";
-
-// TypeScript - псевдонимы типов
-type NumberSet = number;   // Множество 1
-type StringSet = string;   // Множество 2
-type UnionSet = NumberSet | StringSet; // Множество 3 (результат)
-
-// Визуализация:
-NumberSet = {1, 2, 3, 4.5, -10, ...}
-StringSet = {"a", "b", "hello", ...}
-UnionSet = {1, 2, 3, 4.5, -10, "a", "b", "hello", ...}`,
-                  }}
+            <div className="flex flex-col gap-4">
+               <Accordion
+                  data={MainBlockData.map(item => {
+                     return {
+                        button: {
+                           className: 'w-full h-12 text-left bg-white text-black pl-4 rounded-xl text-base cursor-pointer transition-all',
+                           children: item.title,
+                        },
+                        body: (
+                           <div className="flex flex-col shadow-2xl bg-white rounded-b-xl">
+                              {item.codeBlocks.map((codeBlock, index) => {
+                                 return (
+                                    <ConceptBlock
+                                       className="!bg-none grow"
+                                       key={index}
+                                       title={{
+                                          main: codeBlock.title.main,
+                                          subtitle: codeBlock.title.subtitle,
+                                       }}
+                                       codeBlock={{
+                                          title: codeBlock.codeBlock.title,
+                                          code: codeBlock.codeBlock.code,
+                                       }}
+                                    />
+                                 );
+                              })}
+                           </div>
+                        ),
+                     };
+                  })}
+                  classNameItem="main-block-spoller"
                />
             </div>
          </section>
