@@ -164,6 +164,78 @@ TypeScript говорит: "Я не могу гарантировать, что 
          },
       ],
    },
+   {
+      title: 'Примитивы',
+      codeBlocks: [
+         {
+            codeBlock: {
+               title: 'string, number, boolean',
+               code: `// string
+let name: string = "Иван";
+let message: string = 'Привет, мир!';
+let template: string = \`Привет, \${name}!\`;
+
+// number - числа (целые, дробные, отрицательные)
+let age: number = 25;
+let price: number = 99.99;
+let temperature: number = -5;
+
+// boolean - логические значения
+let isActive: boolean = true;
+let isLoading: boolean = false;
+let hasPermission: boolean = (age >= 18);
+`,
+            },
+         },
+         {
+            codeBlock: {
+               title: 'undefined, null, void, any, unknown',
+               code: `// undefined - неопределенное значение
+let undefinedVar: undefined = undefined;
+let emptyValue: undefined;
+
+// null - пустое значение
+let nullVar: null = null;
+
+// void - отсутствие значения (для функций)
+function logMessage(): void {
+   console.log("Сообщение");
+   // не возвращает значение
+}`,
+            },
+         },
+         {
+            codeBlock: {
+               title: 'undefined, null, void, any, unknown',
+               code: `// any - любой тип (отключает проверку типов)
+let dynamicData: any = "текст";
+dynamicData = 42;
+dynamicData = true;
+
+// unknown - неизвестный тип (безопасный аналог any)
+let userInput: unknown = "неизвестные данные";
+// userInput.toUpperCase(); // Ошибка - нужно сначала проверить тип
+if (typeof userInput === "string") {
+   console.log(userInput.toUpperCase()); // ✅ Теперь безопасно
+}`,
+            },
+         },
+         {
+            codeBlock: {
+               title: 'bigint, symbol',
+               code: `// bigint - большие целые числа (окончание n)
+let bigNumber: bigint = 9007199254740991n;
+let hugeId: bigint = 12345678901234567890n;
+
+// symbol - уникальные идентификаторы
+let id1: symbol = Symbol("id");
+let id2: symbol = Symbol("id");
+console.log(id1 === id2); // false - каждый Symbol уникален
+`,
+            },
+         },
+      ],
+   },
    // {
    //    title: '421421421',
    //    codeBlocks: [

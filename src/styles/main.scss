@@ -63,7 +63,14 @@ ul {
    background: #2d2d2d;
    border-radius: 12px;
    overflow: hidden;
-   margin: 16px 0 10px 0;
+
+   &:not(:first-child) {
+      margin-top: 16px;
+   }
+
+   &:not(:last-child) {
+      margin-bottom: 10px;
+   }
 }
 
 .code-header {
@@ -74,8 +81,9 @@ ul {
 }
 
 .code-block {
-   font-size: 16px;
+   font-size: 15px;
    line-height: 1.4;
+   @apply max-md:text-[14px];
 }
 
 h1,

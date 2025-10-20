@@ -24,10 +24,12 @@ const MainBlock = () => {
                                     <ConceptBlock
                                        className="!bg-none grow"
                                        key={index}
-                                       title={{
-                                          main: codeBlock.title.main,
-                                          subtitle: codeBlock.title.subtitle,
-                                       }}
+                                       title={
+                                          codeBlock.title && {
+                                             main: codeBlock.title.main,
+                                             subtitle: codeBlock.title.subtitle,
+                                          }
+                                       }
                                        descr={codeBlock.descr}
                                        codeBlock={{
                                           title: codeBlock.codeBlock.title,

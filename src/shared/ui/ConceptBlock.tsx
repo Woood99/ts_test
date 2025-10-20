@@ -3,9 +3,9 @@ import CodeBlock, { CodeBlockProps } from './CodeBlock';
 
 export interface IConceptBlock {
    className?: string;
-   title: {
+   title?: {
       main: string;
-      subtitle: string;
+      subtitle?: string;
    };
    descr?: string;
    codeBlock: CodeBlockProps;
@@ -14,10 +14,15 @@ export interface IConceptBlock {
 const ConceptBlock = ({ className, title, descr, codeBlock }: IConceptBlock) => {
    return (
       <div className={cn('concept-block', className)}>
-         <p className="concept-title">
-            <b>{title.main} - </b>
-            <span>{title.subtitle}</span>
-         </p>
+         {title && (
+            <p className="concept-title">
+               <b>
+                  {title.main} {title.subtitle && '-'}{' '}
+               </b>
+               {title.subtitle && <span>{title.subtitle}</span>}
+            </p>
+         )}
+
          {descr && <div className="concept-descr" dangerouslySetInnerHTML={{ __html: descr }} />}
          <CodeBlock {...codeBlock} />
       </div>
