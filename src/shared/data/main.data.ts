@@ -189,24 +189,18 @@ let hasPermission: boolean = (age >= 18);
          },
          {
             codeBlock: {
-               title: 'undefined, null, void, any, unknown',
+               title: 'undefined, null',
                code: `// undefined - неопределенное значение
 let undefinedVar: undefined = undefined;
 let emptyValue: undefined;
 
 // null - пустое значение
-let nullVar: null = null;
-
-// void - отсутствие значения (для функций)
-function logMessage(): void {
-   console.log("Сообщение");
-   // не возвращает значение
-}`,
+let nullVar: null = null;`,
             },
          },
          {
             codeBlock: {
-               title: 'undefined, null, void, any, unknown',
+               title: 'any, unknown, void',
                code: `// any - любой тип (отключает проверку типов)
 let dynamicData: any = "текст";
 dynamicData = 42;
@@ -217,7 +211,14 @@ let userInput: unknown = "неизвестные данные";
 // userInput.toUpperCase(); // Ошибка - нужно сначала проверить тип
 if (typeof userInput === "string") {
    console.log(userInput.toUpperCase()); // ✅ Теперь безопасно
-}`,
+}
+   
+// void - отсутствие значения (для функций)
+function logMessage(): void {
+   console.log("Сообщение");
+   // не возвращает значение
+}
+`,
             },
          },
          {

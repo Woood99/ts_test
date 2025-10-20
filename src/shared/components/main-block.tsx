@@ -2,6 +2,7 @@ import { Accordion, ConceptBlock } from '@/shared/ui';
 import { MainBlockData } from '../data';
 
 const MainBlock = () => {
+
    return (
       <div className="flex flex-col gap-12">
          <section>
