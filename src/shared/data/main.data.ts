@@ -200,7 +200,7 @@ let nullVar: null = null;`,
          },
          {
             codeBlock: {
-               title: 'any, unknown, void',
+               title: 'any, unknown, never, void',
                code: `// any - любой тип (отключает проверку типов)
 let dynamicData: any = "текст";
 dynamicData = 42;
@@ -212,6 +212,13 @@ let userInput: unknown = "неизвестные данные";
 if (typeof userInput === "string") {
    console.log(userInput.toUpperCase()); // ✅ Теперь безопасно
 }
+
+// never - значения, которых никогда не бывает
+function infiniteLoop(): never {
+    while (true) {}
+}
+
+const empty: never[] = []; // Нельзя добавить элементы
    
 // void - отсутствие значения (для функций)
 function logMessage(): void {
@@ -237,6 +244,151 @@ console.log(id1 === id2); // false - каждый Symbol уникален
          },
       ],
    },
+   {
+      title: 'Составные типы',
+      codeBlocks: [
+         {
+            codeBlock: {
+               title: 'Комбинация interface и type',
+               code: `// Интерфейс для вложенных объектов
+interface Address {
+   city: string;
+   street?: string;          // опциональное свойство
+   coords: number[];         // массив чисел
+}
+
+// Тип для основного объекта
+type User = {
+   firstname: string;
+   age: number;
+   address: Address;         // вложенный интерфейс
+   onClick: (value: string) => void; // функция-колбэк
+};
+
+// Использование
+const user: User = {
+   firstname: 'Иван',
+   age: 25,
+   address: {
+      city: 'Москва',
+      coords: [55.7558, 37.6173],
+   },
+   onClick: (value) => {
+      console.log(value);
+   },
+};
+
+// Массив пользователей
+const users: User[] = [user];`,
+            },
+         },
+      ],
+   },
+   {
+      title: 'Литеральные типы',
+      codeBlocks: [
+         {
+            codeBlock: {
+               title: 'Числовые и строковые литералы',
+               code: `// Ограничение допустимых значений
+type Rooms = 1 | 2 | 3 | 4 | '5+';
+
+interface IApartmentInfo {
+   rooms: Rooms;
+   price: number;
+   finishing: boolean;
+}
+
+const getApartmentInfo = (info: IApartmentInfo): string => {
+   return \`Квартира с \${info.rooms} комнатами, стоимостью \${info.price} рублей, \${info.finishing ? 'с отделкой' : 'без отделки'}\`;
+};
+
+getApartmentInfo({ rooms: 3, price: 200000, finishing: true });`,
+            },
+         },
+         {
+            codeBlock: {
+               title: 'const assertions и литералы',
+               code: `// Без as const - тип string
+const values = {
+   color: 'green', // тип string
+};
+
+// С as const - тип 'green'
+const constValues = {
+   color: 'green',
+} as const;
+
+type Color = 'red' | 'green' | 'blue';
+
+function paint(color: Color) {}
+
+paint(values.color); // ❌ Ошибка - values.color: string
+paint(constValues.color); // ✅ Работает - constValues.color: 'green'`,
+            },
+         },
+      ],
+   },
+   {
+      title: 'Дженерики (Generics)',
+      codeBlocks: [
+         {
+            title: {
+               main: 'Дженерик',
+               subtitle: 'это как аргумент функции только "тип"',
+            },
+            codeBlock: {
+               title: 'Обобщённые интерфейсы с параметрами по умолчанию',
+               code: `interface IMetaData {
+   title: string;
+}
+
+interface IUser {
+   username: string;
+}
+
+interface IProduct {
+   name: string;
+   price: number;
+}
+
+// T - тип данных, M - тип метаданных (по умолчанию IMetaData)
+interface IApiResponse<T, M = IMetaData> {
+   status: 'error' | 'success';
+   meta?: M;
+   requestId?: string;
+   data: T;
+}
+
+// ✅ Ответ с пользователем
+const userResponse: IApiResponse<IUser> = {
+   status: 'success',
+   data: {
+      username: 'ivan',
+   },
+};
+
+// ✅ Ответ с продуктом и кастомными метаданными
+const productResponse: IApiResponse<IProduct, {timestamp: Date}> = {
+   status: 'success',
+   meta: {
+      timestamp: new Date(),
+   },
+   data: {
+      name: 'Телефон',
+      price: 50000,
+   },
+};
+
+// ✅ Ответ с ошибкой
+const errorResponse: IApiResponse<null> = {
+   status: 'error',
+   data: null,
+};`,
+            },
+         },
+      ],
+   },
    // {
    //    title: '421421421',
    //    codeBlocks: [
@@ -255,6 +407,3 @@ console.log(id1 === id2); // false - каждый Symbol уникален
 ];
 
 export default MainBlockData;
-
-// // TypeScript - литеральные типы
-// type Status = "success" | "error" | "loading";

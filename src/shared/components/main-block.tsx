@@ -1,7 +1,16 @@
 import { Accordion, ConceptBlock } from '@/shared/ui';
 import { MainBlockData } from '../data';
 
+const createEntity = <T extends { username: string }>(arg: T) => {
+   return 'fas';
+};
+
 const MainBlock = () => {
+   // createEntity<IUser>({
+   //    username: '123',
+   //    id: 22,
+   //    createdAt: new Date(),
+   // });
 
    return (
       <div className="flex flex-col gap-12">
@@ -20,21 +29,21 @@ const MainBlock = () => {
                         },
                         body: (
                            <div className="flex flex-col shadow-2xl bg-white rounded-b-xl">
-                              {item.codeBlocks.map((codeBlock, index) => {
+                              {item.codeBlocks.map((block, index) => {
                                  return (
                                     <ConceptBlock
                                        className="!bg-none grow"
                                        key={index}
                                        title={
-                                          codeBlock.title && {
-                                             main: codeBlock.title.main,
-                                             subtitle: codeBlock.title.subtitle,
+                                          block.title && {
+                                             main: block.title.main,
+                                             subtitle: block.title.subtitle,
                                           }
                                        }
-                                       descr={codeBlock.descr}
+                                       descr={block.descr}
                                        codeBlock={{
-                                          title: codeBlock.codeBlock.title,
-                                          code: codeBlock.codeBlock.code,
+                                          title: block.codeBlock.title,
+                                          code: block.codeBlock.code,
                                        }}
                                     />
                                  );
