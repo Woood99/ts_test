@@ -389,6 +389,105 @@ const errorResponse: IApiResponse<null> = {
          },
       ],
    },
+   {
+      title: 'Ограничения дженериков (extends)',
+      codeBlocks: [
+         {
+            descr: `
+           <p>extends устанавливает МИНИМАЛЬНЫЕ требования к типу</p>
+           <p>Объект может иметь БОЛЬШЕ свойств, но не МЕНЬШЕ</p>
+            `,
+            codeBlock: {
+               title: 'Гарантии типов с extends',
+               code: `// extends = "должен содержать как минимум"
+interface FieldValidation {
+   isValid: boolean;
+}
+
+// T extends Record<string, FieldValidation> означает:
+// "T должен быть объектом, где КАЖДОЕ значение содержит как минимум isValid: boolean"
+function validateForm<T extends Record<string, FieldValidation>>(formData: T): void {
+   for (const fieldName in formData) {
+      const field = formData[fieldName];
+      
+      field.isValid; // ✅
+      
+      // ❌ НЕ гарантировано
+      if ('warning' in field) {
+         console.log(field.warning);
+      }
+   }
+}
+
+// ✅
+validateForm({
+   email: { isValid: true },                    // только обязательное поле
+   password: { isValid: false },                // только обязательное поле
+   age: { isValid: true, warning: 'Младше 18' } // обязательное + дополнительное
+});
+
+// ❌
+// validateForm({
+//    email: { value: 'test' }
+// });
+
+
+// ==================================================
+
+interface ConfigBase {
+   enabled: boolean;
+   name: string;
+}
+   
+function validateConfig<T extends ConfigBase>(config: T): void {
+   // ✅ Гарантировано: config.enabled и config.name
+   if (config.enabled) {
+      console.log('Config:', config.name);
+   }
+   
+   if ('timeout' in config && typeof config.timeout === 'number') {
+      console.log('Timeout:', config.timeout);
+   }
+}
+`,
+            },
+         },
+      ],
+   },
+   {
+      title: 'Условные типы (Conditional Types)',
+      codeBlocks: [
+         {
+            codeBlock: {
+               title: 'Проверка типов через тернарный оператор',
+               code: `// 1. Проверка на массив
+type isArray<T> = T extends any[] ? true : false;
+
+const a: isArray<number> = false;        // ✅
+const b: isArray<string[]> = true;       // ✅
+
+// 2. Проверка на примитив
+type IsPrimitive<T> = T extends string | number | boolean ? true : false;
+
+const p1: IsPrimitive<string> = true;    // ✅
+const p2: IsPrimitive<number> = true;    // ✅  
+const p3: IsPrimitive<number[]> = false; // ✅
+
+// 3. Проверка на соответствие интерфейсу
+type User = {
+   username: string;
+};
+
+type randomType<T> = T extends User ? { value: number } : { value: string };
+
+const a: randomType<number> = { value: 'fas' };                      // ✅ { value: string }
+const b: randomType<{ fasfas: string }> = { value: 'fas' };          // ✅ { value: string }
+const c: randomType<{ username: string }> = { value: 412 };          // ✅ { value: number }
+const d: randomType<{ username: string; age: 23 }> = { value: 412 }; // ✅ { value: number }`,
+            },
+         },
+      ],
+   },
    // {
    //    title: '421421421',
    //    codeBlocks: [

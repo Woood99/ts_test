@@ -1,16 +1,8 @@
 import { Accordion, ConceptBlock } from '@/shared/ui';
 import { MainBlockData } from '../data';
 
-const createEntity = <T extends { username: string }>(arg: T) => {
-   return 'fas';
-};
-
 const MainBlock = () => {
-   // createEntity<IUser>({
-   //    username: '123',
-   //    id: 22,
-   //    createdAt: new Date(),
-   // });
+
 
    return (
       <div className="flex flex-col gap-12">

@@ -39,4 +39,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 [Link](https://www.youtube.com/watch?v=LWtHl__oEWc&t=1218s&ab_channel=UlbiTV) - https://www.youtube.com/watch?v=LWtHl__oEWc&t=1218s&ab_channel=UlbiTV
 
-Current Time: 50:48
+Current Time: 01:00:05
