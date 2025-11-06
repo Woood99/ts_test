@@ -393,6 +393,33 @@ const errorResponse: IApiResponse<null> = {
       title: 'Ограничения дженериков (extends)',
       codeBlocks: [
          {
+            title: {
+               main: 'extends',
+               subtitle: 'наследование всех полей + добавление своих',
+            },
+            codeBlock: {
+               title: 'Гарантии типов с extends',
+               code: `type MainInfo = {
+   firstname: string;
+   lastname: string;
+};
+
+type AdditionalInfo = {
+   age: number;
+};
+
+interface UserInfo0 extends MainInfo {
+   age: number;
+}
+
+interface UserInfo1 extends MainInfo, AdditionalInfo {}
+
+const test0: UserInfo0 = { firstname: '123', lastname: '123', age: 123 };
+const test1: UserInfo1 = { firstname: '123', lastname: '123', age: 123 };
+`,
+            },
+         },
+         {
             descr: `
            <p>extends устанавливает МИНИМАЛЬНЫЕ требования к типу</p>
            <p>Объект может иметь БОЛЬШЕ свойств, но не МЕНЬШЕ</p>
@@ -400,6 +427,7 @@ const errorResponse: IApiResponse<null> = {
             codeBlock: {
                title: 'Гарантии типов с extends',
                code: `// extends = "должен содержать как минимум"
+
 interface FieldValidation {
    isValid: boolean;
 }
@@ -484,6 +512,135 @@ const a: randomType<number> = { value: 'fas' };                      // ✅ { va
 const b: randomType<{ fasfas: string }> = { value: 'fas' };          // ✅ { value: string }
 const c: randomType<{ username: string }> = { value: 412 };          // ✅ { value: number }
 const d: randomType<{ username: string; age: 23 }> = { value: 412 }; // ✅ { value: number }`,
+            },
+         },
+      ],
+   },
+   {
+      title: 'Сужение типов (Type Narrowing)',
+      codeBlocks: [
+         {
+            codeBlock: {
+               title: 'Практические примеры сужения типов',
+               code: `// 1. Сужение примитивов с typeof
+type IAge = number | string;
+
+function processAge(age: IAge): void {
+   if (typeof age === 'number') {
+      // методы number
+   }
+   if (typeof age === 'string') {
+      // методы string
+   }
+}
+
+
+// 2. Сужение объектов с оператором in
+interface IUser {
+   username: string;
+   age: IAge;
+}
+
+interface IPerson {
+   username: string;
+}
+
+function processPerson(person: IUser | IPerson): void {
+   if ('age' in person) {
+      // IUser
+   }
+   if ('username' in person) {
+      //  IUser | IPerson
+   }
+}
+
+
+// 3. Сужение с дискриминантными свойствами (discriminated unions)
+interface IBaseCar {
+   maxSpeed: number;
+   weight: number;
+}
+
+interface IBmw extends IBaseCar {
+   type: 'bmw';
+   bmwField: string;
+}
+
+interface IAudi extends IBaseCar {
+   type: 'audi'; 
+   audiField: string;
+}
+
+type ICar = IBmw | IAudi;
+
+function driveCar(car: ICar): void {
+   switch (car.type) {
+      case 'bmw':
+         // IBmw тип с car.bmwField
+         break;
+      case 'audi':
+         // IAudi тип с car.audiField
+         break;
+   }
+}`,
+            },
+         },
+         {
+            codeBlock: {
+               title: 'Создание собственных type guard (пользовательские type guard функции)',
+               code: `interface ICar {
+   maxSpeed: number;
+   width: number;
+}
+
+interface IPerson {
+   name: string;
+   age: number;
+}
+
+interface IBmw extends ICar {
+   type: 'bmw';
+}
+
+interface IAudi extends ICar {
+   type: 'audi';
+}
+
+// Если функция возвращает true, TypeScript должен считать параметр указанным типом
+function isCar(value: ICar | IPerson): value is ICar {
+   return 'maxSpeed' in value && 'width' in value;
+}
+
+function isPerson(value: ICar | IPerson): value is IPerson {
+   return 'name' in value && 'age' in value;
+}
+
+function isBmw(value: IBmw | IAudi): value is IBmw {
+   return value.type === 'bmw';
+}
+
+function isAudi(value: IBmw | IAudi): value is IAudi {
+   return value.type === 'audi';
+}
+
+// Использование в функциях
+function processData(data: ICar | IPerson) {
+   if (isCar(data)) {
+      // ICar
+   }
+   if (isPerson(data)) {
+      // IPerson
+   }
+}
+
+function processCar(car: IBmw | IAudi) {
+   if (isBmw(car)) {
+      // IBmw
+   }
+   if (isAudi(car)) {
+      // IAudi
+   }
+}`,
             },
          },
       ],
