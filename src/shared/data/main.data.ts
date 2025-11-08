@@ -645,6 +645,48 @@ function processCar(car: IBmw | IAudi) {
          },
       ],
    },
+   {
+      title: 'Type Assertions (as)',
+      codeBlocks: [
+         {
+            codeBlock: {
+               title: 'Утверждение типов - когда мы знаем тип лучше TypeScript',
+               code: `// 1. Работа с DOM - TypeScript не знает точный тип элемента
+const input = document.getElementById("email") as HTMLInputElement;
+const div = document.getElementById("wrapper") as HTMLDivElement;
+
+input.value = "test@test.com"; // ✅ Теперь TypeScript знает методы input
+div.innerHTML = "content";     // ✅ Теперь TypeScript знает методы div
+
+// 2. const assertions - фиксация литеральных типов
+const colors = ["red", "green", "blue"] as const; 
+// Тип: readonly ["red", "green", "blue"] вместо string[]
+
+// 3. Приведение JSON данных к интерфейсу
+interface IPerson {
+   name: string;
+   age: number;
+}
+const user = JSON.parse('{"name":"John", "age": 30}') as IPerson;
+user.name; // ✅ TypeScript знает структуру IPerson`,
+            },
+         },
+         {
+            codeBlock: {
+               title: 'instanceof - проверка типа в runtime',
+               code: `// 1. Проверка DOM элементов (самый частый случай)
+function handleElement(element: Element) {
+   if (element instanceof HTMLInputElement) {
+      element.value = "значение";     // ✅ Методы input
+      element.focus();
+   } else if (element instanceof HTMLButtonElement) {
+      element.disabled = true;        // ✅ Методы button
+   }
+}`,
+            },
+         },
+      ],
+   },
    // {
    //    title: '421421421',
    //    codeBlocks: [

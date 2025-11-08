@@ -9,6 +9,8 @@ const MainBlock = () => {
                Typescript - язык со статической типизацией, который по умолчанию использует строгую типизацию, но предоставляет ослаблять её когда
                необходимо (например any).
             </h2>
+            <input className="test-class-input" />
+            <div className="test-class-div"></div>
             <div className="flex flex-col gap-4">
                <Accordion
                   data={MainBlockData.map(item => {
