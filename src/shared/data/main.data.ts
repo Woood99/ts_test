@@ -687,6 +687,65 @@ function handleElement(element: Element) {
          },
       ],
    },
+   {
+      title: 'Оператор typeof',
+      codeBlocks: [
+         {
+            codeBlock: {
+               title: 'typeof - получение типа из значений',
+               code: `// typeof извлекает ТИП переменной или выражения
+// Работает на этапе компиляции (исчезает в JavaScript)
+
+// 1. Получение типа переменной
+const username = "John";
+type UsernameType = typeof username; // "John" (литеральный тип)
+
+const user = {
+   name: "Ivan",
+   age: 25,
+   isActive: true
+};
+type UserType = typeof user; // { name: string; age: number; isActive: boolean }
+
+
+// 2. Получение типа функции
+const calculate = (a: number, b: number): number => a + b;
+type CalculateFn = typeof calculate; // (a: number, b: number) => number
+
+
+// 3. Использование с утилитами TypeScript
+type CalculateReturn = ReturnType<typeof calculate>; // number
+type CalculateParams = Parameters<typeof calculate>; // [a: number, b: number] (кортеж параметров)
+
+
+// 4. Доступ к элементам массивов и кортежей
+const colors = ["red", "green", "blue"] as const;
+
+type AllColors = (typeof colors)[number]; // [number] - все элементы (union) ("red" | "green" | "blue")
+type FirstColor = (typeof colors)[0]; // "red"
+type SecondColor = (typeof colors)[1]; // "green" 
+
+
+// 5. Практическое применение
+const config = {
+   apiUrl: "https://api.example.com",
+   timeout: 5000,
+   retries: 3
+} as const;
+
+type Config = typeof config;
+// {
+//   readonly apiUrl: "https://api.example.com";
+//   readonly timeout: 5000; 
+//   readonly retries: 3;
+// }
+
+// Создаём тип на основе реальных значений
+type ApiUrl = typeof config.apiUrl; // "https://api.example.com"`,
+            },
+         },
+      ],
+   },
    // {
    //    title: '421421421',
    //    codeBlocks: [
