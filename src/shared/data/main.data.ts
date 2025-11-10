@@ -746,6 +746,73 @@ type ApiUrl = typeof config.apiUrl; // "https://api.example.com"`,
          },
       ],
    },
+   {
+      title: 'Оператор keyof',
+      codeBlocks: [
+         {
+            codeBlock: {
+               title: 'keyof - получение ключей типа',
+               code: `// keyof получает union всех ключей (свойств) типа
+// Работает на этапе компиляции
+
+// 1. Получение ключей интерфейса
+interface User {
+   name: string;
+   age: number;
+   email: string;
+}
+
+type UserKeys = keyof User; // "name" | "age" | "email"
+
+const key1: UserKeys = "name";    // ✅
+
+
+// 2. Получение ключей объекта (с typeof)
+const person = {
+   firstName: "John",
+   lastName: "Doe",
+   age: 30
+};
+
+type PersonKeys = keyof typeof person; // "firstName" | "lastName" | "age"
+
+
+// 3. Использование в дженериках для типобезопасности
+function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
+   return obj[key];
+}
+
+const user = { name: "John", age: 25, active: true };
+
+getProperty(user, "name");   // ✅ Возвращает string
+getProperty(user, "age");    // ✅ Возвращает number
+getProperty(user, "active"); // ✅ Возвращает boolean
+// getProperty(user, "email"); // ❌ Ошибка - нет такого ключа
+
+
+// 4. Практическое применение - валидация форм
+interface FormData {
+   email: string;
+   password: string;
+   rememberMe: boolean;
+}
+
+function validateField<T, K extends keyof T>(form: T, field: K, validator: (value: T[K]) => boolean): boolean {
+   return validator(form[field]);
+}
+
+const loginForm: FormData = {
+   email: 'test@example.com',
+   password: 'secret',
+   rememberMe: true,
+};
+
+validateField(loginForm, 'email', email => email.includes('@')); // ✅
+// validateField(loginForm, "username", () => true); // ❌ Ошибка`,
+            },
+         },
+      ],
+   },
    // {
    //    title: '421421421',
    //    codeBlocks: [
