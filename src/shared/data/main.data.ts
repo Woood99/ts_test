@@ -813,6 +813,145 @@ validateField(loginForm, 'email', email => email.includes('@')); // ✅
          },
       ],
    },
+   {
+      title: 'Optional Chaining (?.)',
+      codeBlocks: [
+         {
+            codeBlock: {
+               title: 'Безопасный доступ к свойствам объектов, массивов и методов',
+               code: `// 1. Доступ к свойствам объектов
+interface User {
+   name: string;
+   address?: {
+      street: string;
+      city?: string;
+   };
+   getName?: () => string;
+   characteristics?: Record<string, string>[];
+}
+
+const user: User = { name: 'John' };
+
+// ✅ Безопасный доступ к вложенным свойствам
+user?.address?.city; // undefined
+user?.address?.street; // undefined
+
+// ✅ Безопасный доступ к элементам массива
+user?.characteristics?.[0]; // undefined
+user?.characteristics?.[0]?.name; // undefined
+
+// ✅ Безопасный вызов методов
+user?.getName?.(); // undefined
+
+// 2. Практический пример - обработка API ответов
+interface ApiResponse {
+   data?: {
+      user?: {
+         profile?: {
+            name: string;
+         };
+      };
+   };
+}
+
+function getUserName(response: ApiResponse): string | undefined {
+   return response?.data?.user?.profile?.name;
+}
+
+// Безопасно работает с неполными данными
+getUserName({}); // undefined
+getUserName({ data: {} }); // undefined  
+getUserName({ data: { user: {} } }); // undefined
+getUserName({ data: { user: { profile: { name: 'John' } } } }); // "John"
+
+// 3. Комбинация с другими операторами
+const users: User[] = [];
+const firstUserName = users?.[0]?.name; // undefined
+const firstUserCity = users?.[0]?.address?.city ?? 'Unknown'; // 'Unknown'`,
+            },
+         },
+      ],
+   },
+   {
+      title: 'Nullish Coalescing (??)',
+      codeBlocks: [
+         {
+            title: {
+               main: 'Nullish Coalescing (??)',
+               subtitle: 'оператор, который возвращает правую часть только если левая часть равна null или undefined',
+            },
+            codeBlock: {
+               title: 'Оператор ?? - значения по умолчанию для null/undefined',
+               code: `// 1. Базовое использование
+const username = null ?? "Гость";          // "Гость" ✅
+const userAge = undefined ?? 25;           // 25 ✅
+const email = "ivan@mail.com" ?? "default"; // "ivan@mail.com" ✅
+
+// 2. ❌ Важно: отличие от || (логическое ИЛИ)
+const count = 0 ?? 10;    // 0 ✅ (0 не null/undefined)
+const countWithOR = 0 || 10;   // 10 ❌ (0 считается "ложным")
+
+const emptyText = "" ?? "Текст по умолчанию";    // "" ✅
+const emptyTextWithOR = "" || "Текст по умолчанию";   // "Текст по умолчанию" ❌
+
+const isActive = false ?? true;       // false ✅  
+const isActiveWithOR = false || true;      // true ❌
+
+// 3. ✅ Практические примеры
+// Настройки пользователя
+const userSettings = {
+   theme: null,
+   language: "",
+   itemsPerPage: 0,
+   notifications: undefined
+};
+
+const theme = userSettings.theme ?? "dark";          // "dark" ✅
+const language = userSettings.language ?? "ru";      // "" ✅ 
+const items = userSettings.itemsPerPage ?? 20;       // 0 ✅
+const notifications = userSettings.notifications ?? true; // true ✅
+
+// 4. 💪 Комбинация с optional chaining (?.)
+const user = {
+   profile: {
+      name: "Иван",
+      settings: null
+   }
+};
+
+const userTheme = user?.profile?.settings?.theme ?? "light"; // "light" ✅ (settings?.theme = null)
+
+const userName = user?.profile?.name ?? "Аноним"; // "Иван" ✅
+
+// 5. 🛠️ Работа с API и формами
+interface ApiResponse {
+   data?: {
+      totalItems?: number;
+      users?: string[];
+   };
+}
+
+function processResponse(response: ApiResponse) {
+   const total = response?.data?.totalItems ?? 0;     // 0 если undefined
+   const users = response?.data?.users ?? [];         // [] если undefined
+}
+
+// 6. 🔗 Цепочка значений
+const firstChoice = null ?? undefined ?? "запасной вариант" ?? "последний вариант";  // "запасной вариант"
+
+const config = {
+   color: "",
+   size: 0,
+   weight: null
+};
+
+const color = config.color ?? "red";    // "" ✅
+const size = config.size ?? 10;         // 0 ✅  
+const weight = config.weight ?? 5;      // 5 ✅`,
+            },
+         },
+      ],
+   },
    // {
    //    title: '421421421',
    //    codeBlocks: [
