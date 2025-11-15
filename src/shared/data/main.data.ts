@@ -952,6 +952,78 @@ const weight = config.weight ?? 5;      // 5 ✅`,
          },
       ],
    },
+   {
+      title: 'Mapped Types',
+      codeBlocks: [
+         {
+            title: {
+               main: 'Mapped types',
+               subtitle: 'это возможность создавать новые типы на основе существующих, преобразуя их свойства.',
+            },
+            codeBlock: {
+               title: 'Продвинутые mapped types с модификаторами',
+               code: `// 1. Добавление и удаление модификаторов
+interface IUser {
+   name: string;
+   age: number;
+   friends: string[];
+}
+
+// Добавляет readonly и optional ко всем свойствам
+type OptionalType<T> = {
+   readonly [K in keyof T]?: T[K];
+};
+
+// Убирает readonly и optional со всех свойств  
+type NotOptionalType<T> = {
+   -readonly [K in keyof T]-?: T[K];
+};
+
+type IUser2 = OptionalType<IUser>; // { readonly name?: string; readonly age?: number; readonly friends?: string[]; }
+type IUser3 = NotOptionalType<IUser2>; // { name: string; age: number; friends: string[]; }
+
+
+// 2. Удаление конкретных свойств с помощью as
+interface IUser {
+   type: 'one' | 'two';
+   name: string; 
+   age: number;
+}
+
+// Удаляет свойство N из типа T
+type WithoutType<T, N extends keyof T> = {
+   [K in keyof T as Exclude<K, N>]: T[K];
+};
+
+const withoutType: WithoutType<IUser, 'age'> = {
+   type: 'one',
+   name: '123',
+   // age удалён ✅
+};
+
+
+// 3. Преобразование свойств в функции-геттеры
+interface Config {
+   theme: string;
+   language: string;
+   version: number;
+}
+
+// Создаёт функции-геттеры для всех свойств
+type Getters<T> = {
+   [K in keyof T as \`get\${Capitalize<string & K>}\`]: () => T[K];
+};
+
+type ConfigGetters = Getters<Config>;
+// {
+//   getTheme: () => string;
+//   getLanguage: () => string;
+//   getVersion: () => number;
+// }`,
+            },
+         },
+      ],
+   },
    // {
    //    title: '421421421',
    //    codeBlocks: [
