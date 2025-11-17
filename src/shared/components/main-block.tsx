@@ -1,16 +1,6 @@
 import { Accordion, ConceptBlock } from '@/shared/ui';
 import { MainBlockData } from '../data';
 
-interface IUser {
-   id: number;
-   name: string;
-   age: number;
-   email: string;
-   friendsId?: number[];
-}
-
-type PartialUser = Omit<IUser, 'id' | 'friendsId'>;
-
 const MainBlock = () => {
    return (
       <div className="flex flex-col gap-12">

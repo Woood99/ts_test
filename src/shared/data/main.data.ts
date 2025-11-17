@@ -1058,6 +1058,40 @@ type MyPartial<T> = {
       ],
    },
    {
+      title: 'Utility Types - Record',
+      codeBlocks: [
+         {
+            codeBlock: {
+               title: 'Record<K, T> - объект с заданными ключами и типом значений',
+               code: `// 1. Базовое использование
+type Pages = Record<'home' | 'about' | 'contact', string>; // { home: string; about: string; contact: string; }
+type UserRoles = Record<'admin' | 'user' | 'guest', boolean>; // { admin: boolean; user: boolean; guest: boolean; }
+type Config = Record<string, number>; // { [key: string]: number; }
+
+// 2. Практические примеры
+type ApiEndpoints = Record<'users' | 'posts' | 'comments', string>;
+const endpoints: ApiEndpoints = {
+   users: '/api/users',
+   posts: '/api/posts', 
+   comments: '/api/comments'
+};
+
+type StatusColors = Record<'success' | 'error' | 'warning', string>;
+const colors: StatusColors = {
+   success: '#00ff00',
+   error: '#ff0000',
+   warning: '#ffff00'
+};
+
+// 3. Реализация (как работает внутри)
+type MyRecord<K extends keyof any, T> = {
+   [P in K]: T;
+};`,
+            },
+         },
+      ],
+   },
+   {
       title: 'Utility Types - Required',
       codeBlocks: [
          {
@@ -1142,6 +1176,132 @@ type UserWithoutEmail = Omit<IUser, 'email'>; // { id: number; name: string; age
 type MyOmit<T, K extends keyof T> = {
    [P in keyof T as P extends K ? never : P]: T[P];
 };`,
+            },
+         },
+      ],
+   },
+   {
+      title: 'Utility Types - Exclude',
+      codeBlocks: [
+         {
+            codeBlock: {
+               title: 'Exclude<T, U> - исключает члены из union типа',
+               code: `// 1. Базовое использование
+type Colors = 'red' | 'green' | 'blue' | 'yellow';
+type WarmColors = Exclude<Colors, 'blue' | 'green'>; // 'red' | 'yellow'
+
+type Numbers = 1 | 2 | 3 | 4 | 5;
+type EvenNumbers = Exclude<Numbers, 1 | 3 | 5>; // 2 | 4
+
+type Mixed = string | number | boolean | null;
+type NoNulls = Exclude<Mixed, null>; // string | number | boolean
+
+// 2. Реализация (как работает внутри)
+type MyExclude<T, U> = T extends U ? never : T;`,
+            },
+         },
+      ],
+   },
+   {
+      title: 'Utility Types - Extract',
+      codeBlocks: [
+         {
+            codeBlock: {
+               title: 'Extract<T, U> - оставляет только совместимые члены union типа',
+               code: `// 1. Базовое использование
+type Colors = 'red' | 'green' | 'blue' | 'yellow';
+type PrimaryColors = Extract<Colors, 'red' | 'blue'>; // 'red' | 'blue'
+
+type Numbers = 1 | 2 | 3 | 4 | 5;
+type SmallNumbers = Extract<Numbers, 1 | 2 | 3>; // 1 | 2 | 3
+
+type Mixed = string | number | boolean | null;
+type OnlyPrimitives = Extract<Mixed, string | number | boolean>; // string | number | boolean
+
+// 2. Реализация (как работает внутри)
+type MyExtract<T, U> = T extends U ? T : never;`,
+            },
+         },
+      ],
+   },
+   {
+      title: 'Utility Types - ReturnType',
+      codeBlocks: [
+         {
+            codeBlock: {
+               title: 'ReturnType<T> - тип возвращаемого значения функции',
+               code: `// 1. Базовое использование
+function getUser(): { name: string; age: number } {
+   return { name: 'John', age: 25 };
+}
+
+type User = ReturnType<typeof getUser>; // { name: string; age: number }
+
+function getName(): string {
+   return 'John';
+}
+
+type Name = ReturnType<typeof getName>; // string
+
+type Fn1 = () => string;
+type Result1 = ReturnType<Fn1>; // string
+
+type AsyncFn = () => Promise<string>;
+type AsyncResult = ReturnType<AsyncFn>; // Promise<string>
+
+// 2. Реализация (как работает внутри)
+type MyReturnType<T extends (...args: any) => any> = 
+   T extends (...args: any) => infer R ? R : never;`,
+            },
+         },
+      ],
+   },
+   {
+      title: 'Utility Types - Parameters',
+      codeBlocks: [
+         {
+            codeBlock: {
+               title: 'Parameters<T> - типы параметров функции в виде кортежа',
+               code: `// 1. Базовое использование
+function createUser(name: string, age: number, isActive: boolean): void { ... }
+
+type CreateUserParams = Parameters<typeof createUser>; // [name: string, age: number, isActive: boolean]
+
+type Fn1 = () => void;
+type Params1 = Parameters<Fn1>; // []
+
+type Fn2 = (a: number, b: string, c?: boolean) => void;
+type Params2 = Parameters<Fn3>; // [a: number, b: string, c?: boolean]
+
+// 2. Реализация (как работает внутри)
+type MyParameters<T extends (...args: any) => any> = 
+   T extends (...args: infer P) => any ? P : never;`,
+            },
+         },
+      ],
+   },
+   {
+      title: 'Utility Types - NonNullable',
+      codeBlocks: [
+         {
+            codeBlock: {
+               title: 'NonNullable<T> - удаляет null и undefined из типа',
+               code: `// 1. Базовое использование
+type A = string | null | undefined;
+type B = NonNullable<A>; // string
+
+type C = number[] | null;
+type D = NonNullable<C>; // number[]
+
+type E = { name: string } | undefined;
+type F = NonNullable<E>; // { name: string }
+
+// Сложные union типы
+type Mixed = string | number | boolean | null | undefined;
+type Clean = NonNullable<Mixed>; // string | number | boolean
+
+// 2. Реализация (как работает внутри)
+type MyNonNullable<T> = T extends null | undefined ? never : T;`,
             },
          },
       ],
