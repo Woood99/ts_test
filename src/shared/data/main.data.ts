@@ -1024,6 +1024,128 @@ type ConfigGetters = Getters<Config>;
          },
       ],
    },
+   {
+      title: 'Utility Types - Partial',
+      codeBlocks: [
+         {
+            codeBlock: {
+               title: 'Partial<T> - все свойства становятся необязательными',
+               code: `// 1. Базовое использование
+interface IUser {
+   id: number;
+   name: string;
+   age: number;
+   email: string;
+   friendsId?: number[];
+}
+
+type PartialUser = Partial<IUser>;
+// {
+//   id: number;
+//   name: string;
+//   age: number;
+//   email: string;
+//   friendsId?: number[];
+// }
+
+
+// 2. Реализация (как работает внутри)
+type MyPartial<T> = {
+   [P in keyof T]?: T[P];
+};`,
+            },
+         },
+      ],
+   },
+   {
+      title: 'Utility Types - Required',
+      codeBlocks: [
+         {
+            codeBlock: {
+               title: 'Required<T> - все свойства становятся обязательными',
+               code: `// 1. Базовое использование
+interface IUser {
+   id?: number;
+   name?: string;
+   age: number;
+   email: string;
+   friendsId?: number[];
+}
+
+type RequiredUser = Required<IUser>;
+// {
+//   id: number;
+//   name: string;
+//   age: number;
+//   email: string;
+//   friendsId: number[];
+// }
+
+
+// 2. Реализация (как работает внутри)
+type MyRequired<T> = {
+   [P in keyof T]-?: T[P];
+};`,
+            },
+         },
+      ],
+   },
+   {
+      title: 'Utility Types - Pick',
+      codeBlocks: [
+         {
+            codeBlock: {
+               title: 'Pick<T, K> - выбирает указанные свойства из типа',
+               code: `// 1. Базовое использование
+interface IUser {
+   id: number;
+   name: string;
+   age: number;
+   email: string;
+   friendsId: number[];
+}
+
+type UserName = Pick<IUser, 'name'>; // { name: string; }
+type UserBasicInfo = Pick<IUser, 'name' | 'age'>; // { name: string; age: number; }
+type UserIds = Pick<IUser, 'id' | 'friendsId'>; // { id: number; friendsId: number[]; }
+
+
+// 2. Реализация (как работает внутри)
+type MyPick<T, K extends keyof T> = {
+   [P in K]: T[P];
+};`,
+            },
+         },
+      ],
+   },
+   {
+      title: 'Utility Types - Omit',
+      codeBlocks: [
+         {
+            codeBlock: {
+               title: 'Omit<T, K> - исключает указанные свойства из типа',
+               code: `// 1. Базовое использование
+interface IUser {
+   id: number;
+   name: string;
+   age: number;
+   email: string;
+   friendsId: number[];
+}
+
+type UserWithoutIds = Omit<IUser, 'id' | 'friendsId'>; // { name: string; age: number; email: string; }
+type UserOnlyName = Omit<IUser, 'id' | 'age' | 'email' | 'friendsId'>; // { name: string; }
+type UserWithoutEmail = Omit<IUser, 'email'>; // { id: number; name: string; age: number; friendsId: number[]; }
+
+
+// 2. Реализация (как работает внутри)
+type MyOmit<T, K extends keyof T> = {
+   [P in keyof T as P extends K ? never : P]: T[P];
+};`,
+            },
+         },
+      ],
+   },
    // {
    //    title: '421421421',
    //    codeBlocks: [
